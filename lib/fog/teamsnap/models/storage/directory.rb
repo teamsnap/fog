@@ -16,7 +16,7 @@ module Fog
             service: new_attributes[:service].rackspace,
             collection: new_attributes[:collection].rackspace
           )
-          @rackspace = Fog::Storage::Rackspace::Directory.new(new_attributes.dup)
+          @rackspace = Fog::Storage::Rackspace::Directory.new(rack_attributes)
 
           super(new_attributes)
         end
