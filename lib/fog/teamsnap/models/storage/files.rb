@@ -6,11 +6,16 @@ module Fog
     class Teamsnap
 
       class Files < Array
-        attr_reader :rackspace
+        attr_reader :google, :rackspace
 
         def initialize(attributes={})
           service = attributes.delete(:service)
           directory = attributes.delete(:directory)
+
+          @google = Fog::Storage::Google::Files.new(
+            :directory    => directory.google,
+            :service   => service.google
+          )
 
           @rackspace = Fog::Storage::Rackspace::Files.new(
             :directory    => directory.rackspace,

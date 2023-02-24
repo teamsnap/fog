@@ -6,19 +6,28 @@ module Fog
     class Teamsnap
 
       class Directory < Fog::Model
-        attr_reader :rackspace
+        attr_reader :google, :rackspace
         identity :key, :aliases => ['Name','name']
 
         def initialize(new_attributes = {})
           keys = new_attributes[:key].split('|')
           raise 'Expected fog_directory to be of format RACK_CDN|GCS_BUCKET' unless keys.size == 2
 
-          rack_attributes = new_attributes.dup.merge(
-            service: new_attributes[:service].rackspace,
-            collection: new_attributes[:collection].rackspace,
-            key: keys.first
+          @google = Fog::Storage::Google::Directory.new(
+            new_attributes.dup.merge(
+              service: new_attributes[:service].google,
+              collection: new_attributes[:collection].google,
+              key: keys.last
+            )
           )
-          @rackspace = Fog::Storage::Rackspace::Directory.new(rack_attributes)
+
+          @rackspace = Fog::Storage::Rackspace::Directory.new(
+            new_attributes.dup.merge(
+              service: new_attributes[:service].rackspace,
+              collection: new_attributes[:collection].rackspace,
+              key: keys.first
+            )
+          )
 
           super(new_attributes)
         end
@@ -37,6 +46,7 @@ module Fog
         end
 
         def public_url
+          #TODO: needs google
           @rackspace.public_url
         end
 
