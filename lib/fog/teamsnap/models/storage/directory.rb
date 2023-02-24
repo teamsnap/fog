@@ -6,17 +6,18 @@ module Fog
     class Teamsnap
 
       class Directory < Fog::Model
+        attr_reader :rackspace
         identity :key, :aliases => ['Name','name']
 
         def initialize(new_attributes = {})
           puts new_attributes.values.map{|x| x.class.inspect}
+
           rack_attributes = new_attributes.dup.merge(
             service: new_attributes[:service].rackspace,
-            collection: new_attributes[:collection].downstream[:rackspace]
+            collection: new_attributes[:collection].rackspace
           )
-          @downstream = {
-            rackspace: Fog::Storage::Rackspace::Directory.new(new_attributes.dup)
-          }
+          @rackspace = Fog::Storage::Rackspace::Directory.new(new_attributes.dup)
+
           super(new_attributes)
         end
 
@@ -34,7 +35,7 @@ module Fog
         end
 
         def public_url
-          @downstream[:rackspace].public_url
+          @rackspace.public_url
         end
 
         def save

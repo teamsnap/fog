@@ -7,13 +7,11 @@ module Fog
 
       class Directories < Fog::Collection
         model Fog::Storage::Teamsnap::Directory
-        attr_reader :downstream
+        attr_reader :rackspace
 
         def initialize(attributes = {})
           rack_attributes = attributes.dup.merge(service: attributes[:service].rackspace)
-          @downstream = {
-            rackspace: Fog::Storage::Rackspace::Directories.new(rack_attributes)
-          }
+          @rackspace = Fog::Storage::Rackspace::Directories.new(rack_attributes)
           super(attributes)
         end
       end
