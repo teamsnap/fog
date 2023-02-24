@@ -45,11 +45,6 @@ module Fog
           end
         end
 
-        def public_url
-          #TODO: needs google
-          @rackspace.public_url
-        end
-
         def save
           raise 'not implemented - dir save'
         end

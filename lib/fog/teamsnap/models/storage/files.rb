@@ -26,15 +26,18 @@ module Fog
         end
 
         def head(key, options={})
-          rackspace.head(key, options)
+          google.head(key, options)
+          #rackspace.head(key, options)
         end
 
         def new(attributes = {})
-          rackspace.new(attributes)
+          google.new(attributes)
+          #rackspace.new(attributes)
         end
 
         def get(key, &block)
-          rackspace.get(key, &block)
+          google.get(key, &block)
+          #rackspace.get(key, &block)
         end
 
         def create(attributes = {})
