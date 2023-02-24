@@ -10,8 +10,6 @@ module Fog
         identity :key, :aliases => ['Name','name']
 
         def initialize(new_attributes = {})
-          puts new_attributes.values.map{|x| x.class.inspect}
-
           rack_attributes = new_attributes.dup.merge(
             service: new_attributes[:service].rackspace,
             collection: new_attributes[:collection].rackspace
