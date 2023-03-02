@@ -63,7 +63,7 @@ module Fog
 
         # remove the first folder from the path
         def google_key(key)
-          key.sub(/^\/?[^\/]+/,'')
+          key.sub(/^\/?[^\/]+\/?/,'')
         end
       end
 
