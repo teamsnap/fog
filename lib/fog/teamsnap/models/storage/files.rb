@@ -26,12 +26,13 @@ module Fog
         end
 
         def head(key, options={})
-          google.head(key, options) || rackspace.head(key, options)
+          google.head(google_key(key), options) || rackspace.head(key, options)
         end
 
         def new(attributes = {})
           creating = attributes.delete(:creating)
-          objs = google.new(attributes)
+
+          objs = google.new(google_attrs(attributes))
 
           return objs if creating
 
@@ -42,13 +43,27 @@ module Fog
         end
 
         def get(key, &block)
-          google.get(key, &block) || rackspace.get(key, &block)
+          google.get(google_key(key), &block) || rackspace.get(key, &block)
         end
 
         def create(attributes = {})
           object = new(attributes.merge({creating: true}))
           object.save
           object
+        end
+
+        private
+        # remove the first folder from the path
+        def google_attrs(attrs)
+          google_attrs = attrs.dup
+          return google_attrs.merge(key: google_key(attrs[:key])) if attrs[:key]
+
+          google_attrs
+        end
+
+        # remove the first folder from the path
+        def google_key(key)
+          key.sub(/^\/?[^\/]+/,'')
         end
       end
 
