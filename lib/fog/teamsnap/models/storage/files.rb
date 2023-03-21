@@ -30,15 +30,6 @@ module Fog
         end
 
         def new(attributes = {})
-          creating = attributes.delete(:creating)
-
-          objs = google.new(google_attrs(attributes))
-
-          return objs if creating
-
-          objs.public_url #will throw the Excon::Error::NotFound error if not in GCS
-          objs
-        rescue Excon::Error::NotFound
           rackspace.new(attributes)
         end
 
