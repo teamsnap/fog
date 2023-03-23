@@ -26,23 +26,16 @@ module Fog
         end
 
         def head(key, options={})
-          google.head(google_key(key), options) || rackspace.head(key, options)
+          rackspace.head(key, options)
         end
 
         def new(attributes = {})
-          if attributes.delete(:creating)
-            rackspace.new(attributes)
-          else
-            objs = google.new(google_attrs(attributes))
-            objs.public_url #will throw the Excon::Error::NotFound error if not in GCS
-            objs
-          end
-        rescue Excon::Error::NotFound
+          google.new(google_attrs(attributes)).save if attributes.delete(:creating)
           rackspace.new(attributes)
         end
 
         def get(key, &block)
-          google.get(google_key(key), &block) || rackspace.get(key, &block)
+          rackspace.get(key, &block)
         end
 
         def create(attributes = {})
