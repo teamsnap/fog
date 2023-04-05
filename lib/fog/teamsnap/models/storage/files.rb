@@ -26,16 +26,16 @@ module Fog
         end
 
         def head(key, options={})
-          rackspace.head(key, options)
+          google.head(key, options)
         end
 
         def new(attributes = {})
-          google.new(google_attrs(attributes)).save if attributes.delete(:creating)
-          rackspace.new(attributes)
+          rackspace.new(attributes).save if attributes.delete(:creating)
+          google.new(google_attrs(attributes))
         end
 
         def get(key, &block)
-          rackspace.get(key, &block)
+          google.get(key, &block)
         end
 
         def create(attributes = {})
