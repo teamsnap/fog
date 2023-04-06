@@ -26,7 +26,7 @@ module Fog
         end
 
         def head(key, options={})
-          google.head(key, options)
+          google.head(google_key(key), options)
         end
 
         def new(attributes = {})
@@ -35,7 +35,7 @@ module Fog
         end
 
         def get(key, &block)
-          google.get(key, &block)
+          google.get(google_key(key), &block)
         end
 
         def create(attributes = {})
