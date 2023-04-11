@@ -36,7 +36,7 @@ module Fog
             :host       => "#{bucket_name}.#{@host}",
             :idempotent => true,
             :method     => 'GET',
-            :path       => CGI.escape(object_name),
+            :path       => Fog::Google.escape(object_name),
             :query      => {'torrent' => nil}
           })
         end

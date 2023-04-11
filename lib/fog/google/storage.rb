@@ -53,24 +53,12 @@ module Fog
 
         def host_path_query(params, expires)
           params[:headers]['Date'] = expires.to_i
-          params[:path] = google_escape(params[:path]).gsub('%2F', '/')
+          params[:path] = Fog::Google.escape(params[:path])
           query = [params[:query]].compact
           query << "GoogleAccessId=#{@google_storage_access_key_id}"
           query << "Signature=#{CGI.escape(signature(params))}"
           query << "Expires=#{params[:headers]['Date']}"
           "#{params[:host]}/#{params[:path]}?#{query.join('&')}"
-        end
-
-        # Taken from:
-        # https://github.com/fog/fog-google/blob/1492d725060c8397b3928f76d396b66e0b2f2dfe/lib/fog/google.rb#L31-L39
-        # CGI.escape, but without special treatment on spaces
-        def google_escape(str, extra_exclude_chars = "")
-          # '-' is a special character inside a regex class so it must be first or last.
-          # Add extra excludes before the final '-' so it always remains trailing, otherwise
-          # an unwanted range is created by mistake.
-          str.gsub(/([^a-zA-Z0-9_.#{extra_exclude_chars}-]+)/) do
-            "%" + Regexp.last_match(1).unpack("H2" * Regexp.last_match(1).bytesize).join("%").upcase
-          end
         end
 
         def request_params(params)

@@ -9,6 +9,16 @@ module Fog
     service(:compute, 'Compute')
     service(:storage, 'Storage')
 
+    # CGI.escape, but without special treatment on spaces
+    def self.escape(str,extra_exclude_chars = '')
+      # '-' is a special character inside a regex class so it must be first or last.
+      # Add extra excludes before the final '-' so it always remains trailing, otherwise
+      # an unwanted range is created by mistake.
+      str.gsub(/([^a-zA-Z0-9_.#{extra_exclude_chars}-]+)/) do
+        "%" + Regexp.last_match(1).unpack("H2" * Regexp.last_match(1).bytesize).join("%").upcase
+      end
+    end
+
     class Mock
 
       def self.etag
