@@ -30,7 +30,6 @@ module Fog
         end
 
         def new(attributes = {})
-          rackspace.new(attributes).save if attributes.delete(:creating)
           google.new(google_attrs(attributes))
         end
 
@@ -39,7 +38,7 @@ module Fog
         end
 
         def create(attributes = {})
-          object = new(attributes.merge({creating: true}))
+          object = new(attributes)
           object.save
           object
         end
