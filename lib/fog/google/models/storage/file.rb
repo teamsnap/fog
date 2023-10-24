@@ -123,6 +123,9 @@ module Fog
           merge_attributes(data.headers.reject {|key, value| ['Content-Length', 'Content-Type'].include?(key)})
           self.content_length = Fog::Storage.get_body_size(body)
           self.content_type ||= Fog::Storage.get_content_type(body)
+          if self.content_length.to_i == 0
+            raise Fog::Errors::NotImplemented.new("Google Storage does not allow zero-length PUTs")
+          end
           true
         end
 
